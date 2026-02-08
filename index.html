@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 Valentine Surprise 💖</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        font-family: 'Comic Sans MS', cursive;
+        background: linear-gradient(135deg, #FFD1DC, #FFB6C1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .container {
+        padding: 20px;
+        max-width: 90%;
+        z-index: 2;
+        animation: fadeIn 1.5s ease;
+    }
+
+    h1 {
+        color: #6A0572;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #6A0572;
+        font-size: 16px;
+        margin: 12px 0;
+    }
+
+    .question {
+        font-size: 20px;
+        color: #FF1493;
+        margin-top: 20px;
+    }
+
+    button {
+        border: none;
+        padding: 12px 22px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    #yes {
+        background: #FF69B4;
+        color: white;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+        animation: pulse 2s infinite;
+    }
+
+    #no {
+        background: #FFC0CB;
+        color: #333;
+    }
+
+    #noMessage {
+        color: #6A0572;
+        font-size: 14px;
+        min-height: 22px;
+        margin-top: 10px;
+        transition: opacity 0.4s ease;
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 20px;
+        animation: float 6s linear infinite;
+        opacity: 0.8;
+    }
+
+    .celebrate {
+        display: none;
+        font-size: 22px;
+        color: #6A0572;
+        animation: fadeIn 2s ease forwards;
+        z-index: 3;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(100vh); }
+        100% { transform: translateY(-10vh); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+</style>
+</head>
+
+<body>
+
+<audio id="music" preload="auto" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="main">
+    <h1>💗 Happy Valentine’s Day 💗</h1>
+
+    <p>
+        I’m not very good at saying this face to face…<br>
+        so I made something special just for you 💕
+    </p>
+
+    <p class="question">
+        Will you be my Valentine? 💌
+    </p>
+
+    <div>
+        <button id="yes">YES 💖</button>
+        <button id="no">NO</button>
+    </div>
+
+    <p id="noMessage"></p>
+</div>
+
+<div class="celebrate" id="celebrate">
+    💖 I Love You 💖<br><br>
+    You just made my heart smile 🥺❤️<br>
+    Happy Valentine’s Day 🌹
+</div>
+
+<script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const noMessage = document.getElementById("noMessage");
+    const main = document.getElementById("main");
+    const celebrate = document.getElementById("celebrate");
+    const music = document.getElementById("music");
+
+    // NO button emotional messages
+    const noMessages = [
+        " It’s okay… take your time 🙂",
+        " I just wanted to be honest with you 💭",
+        " You mean more to me than you know 🥺",
+        " Even a ‘no’ won’t change my respect for you 🌸",
+        " I’m glad you at least saw this 💖",
+        " That’s okay… I just wanted you to know how I feel 🌷",
+        " Some feelings are meant to be shared, not forced 💭",
+        " You don’t owe me an answer right now 🙂",
+        " Even this moment means a lot to me 💕",
+        "Thank you for listening with your heart  🌸",
+        " Take your time — good things are never rushed 🙂",
+        " I’m glad I had the courage to be honest 🌷",
+        "Whatever you choose, I respect you 🌸",
+        " Some feelings are shared just to be true 💭",
+        "Thank you for hearing me out  💖",
+        "I will give you Choclate, If you say Yes 💕"
+    ];
+
+    let noClickCount = 0;
+
+    noBtn.addEventListener("click", () => {
+        if (noClickCount < noMessages.length) {
+            noMessage.style.opacity = 0;
+            setTimeout(() => {
+                noMessage.innerText = noMessages[noClickCount];
+                noMessage.style.opacity = 1;
+            }, 200);
+            noClickCount++;
+        } else {
+            noBtn.disabled = true;
+            noBtn.innerText = "💭";
+            noMessage.innerText = "Plzzzzzz Love You Naaa Babyyy...🌷";
+        }
+    });
+    let audioUnlocked = false;
+
+    function unlockAudio() {
+        if (!audioUnlocked) {
+            music.play().then(() => {
+                music.pause();
+                music.currentTime = 0;
+                audioUnlocked = true;
+            }).catch(() => {});
+    }
+}
+    // Unlock on any first touch
+    document.body.addEventListener("touchstart", unlockAudio, { once: true });
+    document.body.addEventListener("click", unlockAudio, { once: true });
+
+
+    // YES button celebration
+    yesBtn.addEventListener("click", () => {
+        main.style.display = "none";
+        celebrate.style.display = "block";
+        music.currentTime = 0;
+        music.play();
+    });
+
+    // Floating hearts animation
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerText = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+    }
+    noBtn.style.opacity = "0.6";
+    yesBtn.style.opacity = "0.8";
+    setInterval(createHeart, 350);
+</script>
+
+</body>
+</html>
